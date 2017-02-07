@@ -4,7 +4,6 @@ PRODUCT_PACKAGES += \
     factory_init.project.rc \
     factory_init.rc \
     fstab.mt6755 \
-    init.aee.rc \
     init.modem.rc \
     init.mt6755.rc \
     init.mt6755.usb.rc \
