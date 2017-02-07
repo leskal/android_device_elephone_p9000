@@ -13,4 +13,5 @@ PRODUCT_PACKAGES += \
     libaudio-resampler \
     libaudiopolicymanagerdefault \
     libtinycompress \
-    libtinyxml
+    libtinyxml \
+    tinymix
