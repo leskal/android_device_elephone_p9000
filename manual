@@ -22,8 +22,6 @@ export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -X
 
 ./prebuilts/sdk/tools/jack-admin start-server
 
-export USE_NINJA=false && unset BUILDING_WITH_NINJA
-
 . build/envsetup.sh
 
 brunch p9000
