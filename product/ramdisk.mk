@@ -16,5 +16,6 @@ PRODUCT_PACKAGES += \
     meta_init.rc \
     ueventd.mt6755.rc
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/init/mediaserver.rc:system/etc/init/mediaserver.rc
+# Properly input of int.rc
+PRODUCT_COPY_FILES := \
+     $(LOCAL_PATH)/rootdir/etc/init.rc:root/init.rc
