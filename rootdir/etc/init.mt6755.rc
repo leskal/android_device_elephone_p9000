@@ -125,6 +125,8 @@ on post-fs
 
     chown system system /protect_s
     chmod 0770 /protect_s
+    
+    mkdir /protect_s/properties 0770 system system
 
 on post-fs-data
     write /proc/bootprof "INIT:post-fs-data"
@@ -470,12 +472,12 @@ on post-fs-data
 
     chmod 0660 /dev/mtk_disp_mgr
     chown system graphics /dev/mtk_disp_mgr
-    
-    chmod 0660 /sys/devices/platform/mtk_disp_mgr.0/rgb
-    chown system system /sys/devices/platform/mtk_disp_mgr.0/rgb
 
     chmod 0660 /dev/mtkfb_vsync
     chown system graphics /dev/mtkfb_vsync
+    
+    chmod 0660 /sys/devices/platform/mtk_disp_mgr.0/rgb
+    chown system system /sys/devices/platform/mtk_disp_mgr.0/rgb
 
     chmod 0660 /dev/sw_sync
     chown system graphics /dev/sw_sync
@@ -1130,6 +1132,7 @@ service enableswap /system/bin/sh /enableswap.sh
     seclabel u:r:enableswap:s0
 
 service swapoff_action /system/bin/sh /disableswap.sh
+    seclabel u:r:init:s0
     class main
     disabled
     oneshot
@@ -1660,12 +1663,10 @@ service fingerprintd /system/bin/fingerprintd
 	start fingerprintd
 
 #goodix
-chmod 666 /dev/goodix_fp
-chmod 777 /system/bin/gx_fpd
-service gx_fpd /system/bin/gx_fpd
+service gx_fpd /system/bin/goodixfingerprintd
 	class late_start
-	user root
-	group root system
+	user system
+	group system
 	disabled
 	on property:service.fingerprint=goodix
 	start gx_fpd

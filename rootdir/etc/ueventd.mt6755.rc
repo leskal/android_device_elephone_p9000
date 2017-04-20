@@ -122,5 +122,6 @@
 /dev/madev0		0666	root	root
 /dev/esfp0		0666	root	root
 /dev/sunwave_fp	0666	root	root
-/dev/spidev0.0		0666	root	root
+/dev/goodix_fp	0666	root	root
+/dev/spidev0.0	0666	root	root
 
