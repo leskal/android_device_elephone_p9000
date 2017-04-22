@@ -1,2 +1,5 @@
 # MTK audio
 BOARD_USES_MTK_AUDIO := true
+
+#XML audio
+USE_XML_AUDIO_POLICY_CONF := 1
