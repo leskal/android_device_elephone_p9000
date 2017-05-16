@@ -1,3 +1,4 @@
 # Package
 PRODUCT_PACKAGES += \
-    Gello
+    Gello \
+    Jelly
