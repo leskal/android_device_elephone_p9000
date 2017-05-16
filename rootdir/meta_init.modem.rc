@@ -6,7 +6,6 @@
 
 on post-fs-data
 
-#INTERNAL_START
     write /proc/bootprof "post-fs-data: on meta modem start"
 
     # Modem related device nodes
@@ -14,6 +13,10 @@ on post-fs-data
     mkdir /data/nvram/md3  0770 root system
     mkdir /data/md3	0770 root system
 
+#  Build-in Modified - S
+#    insmod /system/lib/modules/ccci_plat.ko
+#    insmod /system/lib/modules/ccci.ko
+#  Build-in Modified - E
     chown radio radio /sys/kernel/ccci/boot
 
 #SeLinux
@@ -54,6 +57,3 @@ service ccci_rpcd /system/bin/ccci_rpcd 0
     user radio
     group radio system
     oneshot
-
-
-#INTERNAL_END
