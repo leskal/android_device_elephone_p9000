@@ -34,6 +34,9 @@ BOARD_EGL_WORKAROUND_BUG_10194508 := true
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
 
+# init		
+TARGET_PROVIDES_INIT_RC := true
+
 # system.prop
 TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
 
