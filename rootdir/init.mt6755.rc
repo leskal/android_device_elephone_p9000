@@ -38,6 +38,8 @@ on post-fs
 
     chown system system /protect_s
     chmod 0770 /protect_s
+    
+    mkdir /protect_s/properties 0770 system system
 
     mkdir /nvdata/APCFG 0770 system camera
     mkdir /nvdata/APCFG/APRDCL 0770 system camera
