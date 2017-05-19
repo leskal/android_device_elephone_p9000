@@ -16,10 +16,13 @@ on init
 on charger
     mkdir /dev/block/platform/mtk-msdc.0/by-name 0755 root system
     symlink /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/logo /dev/block/platform/mtk-msdc.0/by-name/logo
+    chown root system /dev/block/platform/mtk-msdc.0/by-name/logo
+    chmod 0770 /dev/block/platform/mtk-msdc.0/by-name/logo
 
     mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system ro wait
-    chmod 0666 /dev/kmsg
-    exec /system/bin/setprop sys.usb.config adb
+    start spm_script
+		chmod 0666 /dev/kmsg
+		write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
     start fuelgauged
     start kpoc_charger
     start servicemanager
@@ -48,6 +51,10 @@ on post-fs
     mkdir /dev/block/platform/mtk-msdc.0/by-name 0755 root system
     symlink /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/nvram /dev/block/platform/mtk-msdc.0/by-name/nvram
     symlink /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/proinfo /dev/block/platform/mtk-msdc.0/by-name/proinfo
+    chown root system /dev/block/platform/mtk-msdc.0/by-name/nvram
+    chmod 0770 /dev/block/platform/mtk-msdc.0/by-name/nvram
+    chown root system /dev/block/platform/mtk-msdc.0/by-name/proinfo
+    chmod 0770 /dev/block/platform/mtk-msdc.0/by-name/proinfo
 
     # Wifi
     mknod /dev/wmtWifi c 153 0
