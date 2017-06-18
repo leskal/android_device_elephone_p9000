@@ -16,4 +16,3 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/nfc/nfc.cfg:system/etc/nfc.cfg \
     $(LOCAL_PATH)/configs/nfc/nfcse.cfg:system/etc/nfcse.cfg \
     $(LOCAL_PATH)/configs/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
-    
