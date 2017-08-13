@@ -1,12 +1,18 @@
+on post-fs-data
+    chmod 0664 /sys/class/android_usb/android0/iSerial
+    chown root system /sys/class/android_usb/android0/iSerial
+    chmod 0664 /sys/devices/platform/mt_usb/cmode
+    chown root system /sys/devices/platform/mt_usb/cmode
+
 on boot
-    setprop sys.usb.vid 0E8D
+    setprop sys.usb.vid ${ro.usb.vid}
     write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/iProduct ${ro.product.model}
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
     write /sys/class/android_usb/android0/f_rndis/wceis 1
     write /sys/class/android_usb/android0/f_rndis/manufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/f_rndis/vendorID ${sys.usb.vid}
-    
+
 on charger
     write /sys/class/android_usb/android0/enable 1
 
@@ -21,7 +27,6 @@ on fs
     write /sys/class/android_usb/android0/f_ffs/aliases adb
     chown system system /sys/class/android_usb/android0/f_acm/port_index
     chmod 0660 /sys/class/android_usb/android0/f_acm/port_index
-
 
 on post-fs-data
     chown radio system /sys/class/usb_rawbulk/data/enable
@@ -382,9 +387,9 @@ on property:sys.usb.config=charging
 
 on property:sys.usb.charging=yes
     write /sys/class/android_usb/android0/enable 0
-	write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-	write /sys/class/android_usb/android0/idProduct 2008
-	write /sys/class/android_usb/android0/functions mtp
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 2008
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
     write /sys/devices/platform/mt_usb/cmode 2
 
@@ -480,90 +485,6 @@ on property:sys.usb.config=eem,adb,acm
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
-#C2K bypass
-on property:sys.usb.config=via_bypass
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2031
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions via_modem,via_ets,via_atc
-    write /sys/class/android_usb/android0/enable 1
-    setprop sys.usb.state ${sys.usb.config}
-    
-#C2K bypass,adb
-on property:sys.usb.config=via_bypass,adb
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2032
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions via_modem,via_ets,via_atc,adb
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state ${sys.usb.config}
-
-#C2K bypass,acm
-on property:sys.usb.config=via_bypass,acm
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2033
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions via_modem,via_ets,via_atc,acm
-    write /sys/class/android_usb/android0/enable 1
-    setprop sys.usb.state ${sys.usb.config}
-    
-#C2K bypass,adb,acm
-on property:sys.usb.config=via_bypass,adb,acm
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2034
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions via_modem,via_ets,via_atc,adb,acm
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state ${sys.usb.config}
-
-#C2K rndis,bypass
-on property:sys.usb.config=rndis,via_bypass
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2036
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions rndis,via_ets
-    write /sys/class/android_usb/android0/enable 1
-    setprop sys.usb.state ${sys.usb.config}
-    
-#C2K rndis,bypass,adb
-on property:sys.usb.config=rndis,via_bypass,adb
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-    write /sys/class/android_usb/android0/idProduct 2037
-    write /sys/devices/platform/mt_usb/saving 1
-    write /sys/class/android_usb/android0/functions rndis,via_ets,adb
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state ${sys.usb.config}
-
-#C2K rndis,bypass,acm
-	on property:sys.usb.config=rndis,via_bypass,acm
-	write /sys/class/android_usb/android0/enable 0
-	write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-	write /sys/class/android_usb/android0/idProduct 2038
-	write /sys/devices/platform/mt_usb/saving 1
-	write /sys/class/android_usb/android0/functions rndis,via_ets,acm
-	write /sys/class/android_usb/android0/enable 1
-	setprop sys.usb.state ${sys.usb.config}
-
-#C2K rndis,bypass,adb,acm
-	on property:sys.usb.config=rndis,via_bypass,adb,acm
-	write /sys/class/android_usb/android0/enable 0
-	write /sys/class/android_usb/android0/idVendor ${sys.usb.config}
-	write /sys/class/android_usb/android0/idProduct 2039
-	write /sys/devices/platform/mt_usb/saving 1
-	write /sys/class/android_usb/android0/functions rndis,via_ets,adb,acm
-	write /sys/class/android_usb/android0/enable 1
-	start adbd
-	setprop sys.usb.state ${sys.usb.config}
-    
 #43.acm third port for bt
 on property:sys.usb.config=acm_third
     write /sys/class/android_usb/android0/enable 0
@@ -579,7 +500,7 @@ on property:sys.usb.config=acm_third
 on property:sys.usb.config=gs3
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct 2006
+    write /sys/class/android_usb/android0/idProduct 2044
     write /sys/class/android_usb/android0/f_acm/port_index 4
     write /sys/class/android_usb/android0/functions mass_storage,adb,acm
     write /sys/class/android_usb/android0/enable 1
@@ -595,10 +516,12 @@ on property:sys.usb.config=gs3,dual_acm
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mass_storage,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
     start adbd
     setprop sys.usb.state ${sys.usb.config}
     setprop sys.usb.acm_idx 1,4
-    
+
 on property:sys.usb.config=gs1gs3
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
@@ -607,6 +530,10 @@ on property:sys.usb.config=gs1gs3
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mass_storage,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
     setprop sys.usb.acm_idx 2,4
@@ -619,90 +546,138 @@ on property:sys.usb.config=gs1gs3,dual_acm
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
     setprop sys.usb.acm_idx 1,2,4
-    
-###############################################
 
+###############################################
 on property:sys.usb.config=mass_storage,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 202D
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mass_storage,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
     
 on property:sys.usb.config=mtp,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 202A
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mtp,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.config=ptp,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 202B
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions ptp,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
    
 on property:sys.usb.config=rndis,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 202C
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions rndis,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.config=mass_storage,adb,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 2029
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mass_storage,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.config=mtp,adb,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 2026
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions mtp,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.config=ptp,adb,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 2027
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions ptp,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.config=rndis,adb,dual_acm
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
     write /sys/class/android_usb/android0/idProduct 2028
+    write /sys/class/android_usb/android0/f_acm/port_index 2,4
     write /sys/devices/platform/mt_usb/saving 1
     write /sys/class/android_usb/android0/functions rndis,adb,acm
     write /sys/class/android_usb/android0/enable 1
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    chown system radio /dev/ttyGS1
+    chmod 0660 /dev/ttyGS1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
-
-###############################################
-
+    setprop sys.usb.acm_idx 2,4
 
 on property:sys.usb.bicr=yes
     write /sys/class/android_usb/android0/f_mass_storage/bicr 1
@@ -713,10 +688,28 @@ on property:sys.usb.bicr=no
     write /sys/class/android_usb/android0/f_mass_storage/lun/file "0"
 
 on property:mediatek.usb.port.mode=usb
-      write /sys/devices/platform/mt_usb/portmode 0
+      write /sys/bus/platform/devices/musb-hdrc/portmode 0
 
 on property:mediatek.usb.port.mode=uart
-      write /sys/devices/platform/mt_usb/portmode 1
+      write /sys/bus/platform/devices/musb-hdrc/portmode 1
+
+on property:mediatek.usb.speed.mode=u3
+      write /sys/module/musb_hdrc/parameters/speed 1
+
+on property:mediatek.usb.speed.mode=u2
+      write /sys/module/musb_hdrc/parameters/speed 0
+
+on property:persist.mediatek.usb.speed.mode=u3
+      write /sys/module/musb_hdrc/parameters/speed 1
+
+on property:persist.mediatek.usb.speed.mode=u2
+      write /sys/module/musb_hdrc/parameters/speed 0
+
+on property:mediatek.usb.sib_enable=1
+      write /sys/bus/platform/devices/musb-hdrc/sib_enable 1
+
+on property:mediatek.usb.sib_enable=0
+      write /sys/bus/platform/devices/musb-hdrc/sib_enable 0
 
 on property:mediatek.em.usb.set=USB_DRIVING_CAPABILITY
     write /sys/kernel/debug/usb20_phy/USB_DRIVING_CAPABILITY ${mediatek.em.usb.value}
@@ -732,3 +725,7 @@ on property:mediatek.em.usb.set=RG_USB20_VRT_VREF_SEL
 
 on property:mediatek.em.usb.set=RG_USB20_INTR_EN
 	write /sys/kernel/debug/usb20_phy/RG_USB20_INTR_EN ${mediatek.em.usb.value}
+
+#add by liliang.bao 
+on property:ril.sn.set=yes
+    write /sys/class/android_usb/android0/iSerial ${persist.radio.serial}
