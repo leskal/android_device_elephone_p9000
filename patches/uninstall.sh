@@ -6,10 +6,10 @@ dirs="bionic frameworks/av frameworks/native system/core system/sepolicy"
 
 for dir in $dirs ; do
 	cd $rootdirectory
-	#cd $dir
+	cd $dir
 	echo "Reverting $dir patches..."
-	#git apply --reverse $rootdirectory/device/elephone/p9000/patches/$dir/*.patch
-	repo sync $dir
+	git checkout -- .
+	git clean -fd
 	echo " "
 done
 
