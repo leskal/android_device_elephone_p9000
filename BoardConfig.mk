@@ -26,11 +26,6 @@ include $(LOCAL_PATH)/board/*.mk
 
 #######################################################################
 
-# EGL
-BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl.cfg
-USE_OPENGL_RENDERER := true
-BOARD_EGL_WORKAROUND_BUG_10194508 := true
-
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
 
