@@ -1,0 +1,36 @@
+From 54fd9d189fb23be8383d1e23849eb967a4a411c1 Mon Sep 17 00:00:00 2001
+From: Diogo Ferreira <defer@cyngn.com>
+Date: Mon, 14 Aug 2017 17:30:14 +0300
+Subject: [PATCH] libstagefright: mtk: Use vendor extensions to check if we should fixup cropping
+
+For mediatek video codecs, validate that the current cropped rectangle
+is valid and use the full frame size otherwise. This fixes a bug where
+format changes in the same native window would preserve the previous
+cropping and cause most of the image to be off-screen.
+
+Change-Id: If56ca11453f5d2e04a4138b2efe28203f30ba569
+Ticket: PORRIDGE-440
+---
+
+diff --git a/media/libstagefright/ACodec.cpp b/media/libstagefright/ACodec.cpp
+index 92e2847..d00c19b 100644
+--- a/media/libstagefright/ACodec.cpp
++++ b/media/libstagefright/ACodec.cpp
+@@ -5142,7 +5142,16 @@
+                             rect.nWidth = videoDef->nFrameWidth;
+                             rect.nHeight = videoDef->nFrameHeight;
+                         }
+-
++#ifdef MTK_HARDWARE
++                    if (!strncmp(mComponentName.c_str(), "OMX.MTK.", 8) && mOMX->getConfig(
++                            mNode, (OMX_INDEXTYPE) 0x7f00001c /* OMX_IndexVendorMtkOmxVdecGetCropInfo */,
++                            &rect, sizeof(rect)) != OK) {
++                        rect.nLeft = 0;
++                        rect.nTop = 0;
++                        rect.nWidth = videoDef->nFrameWidth;
++                        rect.nHeight = videoDef->nFrameHeight;
++                    }
++#endif
+                         if (rect.nLeft < 0 ||
+                             rect.nTop < 0 ||
+                             rect.nLeft + rect.nWidth > videoDef->nFrameWidth ||
