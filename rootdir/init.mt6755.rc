@@ -28,6 +28,15 @@ on init
     chown root system /dev/kmsg
     chmod 0666 /dev/kmsg
 
+on charger
+    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system ro wait    
+    start spm_script
+		chmod 0666 /dev/kmsg
+		write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
+    start fuelgauged
+    start kpoc_charger
+    start servicemanager
+
 on fs
     mount_all /fstab.mt6755
 
