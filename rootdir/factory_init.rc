@@ -503,11 +503,6 @@ service ccci3_mdinit /system/bin/ccci_mdinit 2
     group radio system
     oneshot
 
-service ccci_rpcd /system/bin/ccci_rpcd 0
-    user radio
-    group radio system
-    oneshot
-
 service nvram_daemon /system/bin/nvram_daemon
     class main
     user root
