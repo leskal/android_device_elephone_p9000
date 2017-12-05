@@ -6,9 +6,8 @@ PRODUCT_COPY_FILES += \
 
 # Package
 PRODUCT_PACKAGES += \
-    Snap \
-    mtkcamera_parameters
+    Snap
 
 # Configuration
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/camera/camerasize.xml:system/etc/camerasize.xml
+    $(LOCAL_PATH)/configs/camera/camerasize.xml:system/etc/camerasize.xml
