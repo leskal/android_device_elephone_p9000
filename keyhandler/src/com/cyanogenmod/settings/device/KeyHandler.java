@@ -123,7 +123,7 @@ public class KeyHandler implements DeviceKeyHandler {
 		im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
 	}
 
-	public boolean handleKeyEvent(KeyEvent event) {
+	public KeyEvent handleKeyEvent(KeyEvent event) {
 		int scanCode = event.getScanCode();
 		boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
 		TelecomManager telecomManager = (TelecomManager) handlerContext.getSystemService(Context.TELECOM_SERVICE);
@@ -136,7 +136,7 @@ public class KeyHandler implements DeviceKeyHandler {
 			hHandler.removeCallbacks(homeLongPressTimeoutRunnable);
 			hHandler.removeCallbacks(homeDoubleTapTimeoutRunnable);
 			hHandler.removeCallbacks(additionalLongPressTimeoutRunnable);
-			return true;
+			return null;
 		}
 		if (scanCode == 250) {
 			if(down){
@@ -147,7 +147,7 @@ public class KeyHandler implements DeviceKeyHandler {
 				additioanalPressed = false;
 				if (additioanalConsumed){
 					additioanalConsumed = false;
-					return true;
+					return null;
 				}
 				hHandler.removeCallbacks(additionalLongPressTimeoutRunnable);
 				PackageManager pm = handlerContext.getPackageManager();
@@ -157,7 +157,7 @@ public class KeyHandler implements DeviceKeyHandler {
 					handlerContext.startActivity(startPackage);
 				}
 			}
-			return true;
+			return null;
 		}
 		if (scanCode == 102) {
 			if (down){
@@ -172,11 +172,11 @@ public class KeyHandler implements DeviceKeyHandler {
 				hHandler.removeCallbacks(homeLongPressTimeoutRunnable);
 				if (homeConsumed) {
 					homeConsumed = false;
-					return true;
+					return null;
 				}
 				homeDoubleTapPending = true;
 				hHandler.postDelayed(homeDoubleTapTimeoutRunnable, 300);
-				return true;
+				return null;
 			}
 			if (homeDoubleTapPending) {
 				homeDoubleTapPending = false;
@@ -184,9 +184,9 @@ public class KeyHandler implements DeviceKeyHandler {
 				hHandler.removeCallbacks(homeDoubleTapTimeoutRunnable);
 				handlerTriggerVirtualKeypress(KeyEvent.KEYCODE_HOME);
 			}
-			return true;
+			return null;
 		}
-		return false;
+		return event;
 	}
 
 	static long[] getLongIntArray(Resources r, int resid) {
